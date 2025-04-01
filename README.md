@@ -9,7 +9,7 @@
 
 This repository contains the official code and resources for our paper:  
 
-**[DASH: Detection and Assessment of Systematic Hallucinations of VLMs]()**
+**[DASH: Detection and Assessment of Systematic Hallucinations of VLMs](https://arxiv.org/abs/2503.23573)**
 
 **Our object hallucination benchmark [DASH-B](https://github.com/YanNeu/DASH-B) is already available!**
 
@@ -19,7 +19,7 @@ This repository contains the official code and resources for our paper:
   <img width="800" src="./docs/assets/teaser_figure_wide.png", alt="Examples from the benchmark">
 </p>
 
-**[Requirements](#setup)** | **[Pipeline](#pipeline)** | **[Images](#images)** | **[Benchmark](https://github.com/YanNeu/DASH-B)** | **[arXiv]()** | **[Citation](#citation)**
+**[Requirements](#setup)** | **[Pipeline](#pipeline)** | **[Images](#images)** | **[Benchmark](https://github.com/YanNeu/DASH-B)** | **[arXiv](https://arxiv.org/abs/2503.23573)** | **[Citation](#citation)**
 
 
 
