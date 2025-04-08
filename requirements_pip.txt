@@ -1,0 +1,37 @@
+#cannot be installed at the same time as torch?
+--extra-index-url https://download.pytorch.org/whl/cu121
+torch==2.4.1
+torchvision==0.19.1
+torchaudio==2.4.1
+timm>=1.0.9
+diffusers[torch]
+transformers==4.49.0
+open_clip_torch
+accelerate
+kornia
+omegaconf
+lpips
+matplotlib
+opencv-python
+wandb
+prettytable
+segment-anything-hq
+grad-cam
+dreamsim
+pycocotools
+#Coq VLM
+SwissArmyTransformer>=0.4.9
+xformers>=0.0.22
+spacy>=3.6.0
+pillow>=10.2.0
+deepspeed>=0.13.1
+seaborn>=0.13.2
+loguru~=0.7.2
+streamlit>=1.31.0
+pydantic>=2.6.0
+datasets
+jsonlines>=4.0.0
+pytesseract
+
+#flash-attn
+#flash-attn

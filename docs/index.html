@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DASH: Detection and Assessment of Systematic Hallucinations of VLMs</title>
+    <style>
+        /* Common Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        
+        body {
+            font-family: 'Avenir Next', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            padding: 2rem 0;
+        }
+        
+        .teaser-container {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            margin: 2rem 0;
+        }
+        
+        .teaser-image {
+            max-width: 100%;
+            height: 280px; /* Set an appropriate height */
+            border-radius: 5px;
+        }
+
+        .platform-links {
+           background-color: #FFEAC2; /* Light orange */
+           display: flex;
+            gap: 40px;
+            align-items: center;
+            align: center;
+            margin: 2rem 0;
+            padding: 0.1rem;
+            justify-content: center;
+
+            border-radius: 5px;
+            max-width: 100%;
+        }
+        .platform-links a {
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            gap: 5px;
+            color: black;
+            font-size: 16px;
+            font-family: 'Avenir Next', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .platform-links img {
+/*            width: 10/*0px;*/
+/*            height: 40px;*/
+            object-fit: contain;
+            transition: transform 0.3s;
+        }
+        .platform-links img:hover {
+            transform: scale(1.1);
+        }
+    
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .authors {
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .author {
+            margin: 0 0.5rem;
+        }
+        .contrib {
+            font-size: 0.8rem;
+            margin: 0 0.5rem;
+        }
+        
+        .abstract {
+            margin: 2rem 0;
+            padding: 1.5rem;
+            border-radius: 5px;
+            max-width: 100%;
+
+        }
+        
+        .abstract h2 {
+            margin-bottom: 1rem;
+
+        }
+        
+        section {
+            margin: 2rem 0;
+        }
+        
+        section h2 {
+            margin-bottom: 1rem;
+        }
+        
+        p {
+            margin-bottom: 1rem;
+            text-align: justify;
+        }
+        
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+         /* Dark Theme - Updated with more gentle colors */
+        body.dark-theme {
+            background-color: #1a365d;
+            color: #FFEAC2;
+        }
+        
+        .dark-theme .abstract {
+            background-color: #234470;
+        }
+        
+        .dark-theme .theme-toggle {
+            background-color: #FFEAC2;
+            color: #1a365d;
+        }
+        
+        .dark-theme a {
+            color: #f0c693;
+        }
+
+        body.light-theme {
+            background-color: #ffffff;
+            color: #333333;
+        }
+        
+        .light-theme .abstract {
+            background-color: #f5f5f5;
+        }
+        
+        .light-theme .theme-toggle {
+            background-color: #1a365d;
+            color: #f5f5f5;
+        }
+        
+        ::-moz-selection { /* Code for Firefox */
+            color: white;
+            background: #234470;
+        }
+
+        ::selection {
+            color: white;
+            background: #234470;
+        }       
+        footer {
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 3rem;
+            font-size: 0.9rem;
+        }
+        .leaderboard-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 16px;
+        }
+        
+        .leaderboard-table th {
+            background-color: #1a365d;
+            color: #FFEAC2;
+            text-align: left;
+            padding: 12px 15px;
+        }
+        
+        .leaderboard-table td {
+            padding: 10px 15px;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .leaderboard-table tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        
+        .leaderboard-table tr:hover {
+            background-color: #e5e5e5;
+        }
+        
+        .dark-theme .leaderboard-table th {
+            background-color: #234470;
+        }
+        
+        .dark-theme .leaderboard-table tr:nth-child(even) {
+            background-color: #2c4c7c;
+        }
+        
+        .dark-theme .leaderboard-table tr:hover {
+            background-color: #39597c;
+        }
+        
+        .dark-theme .leaderboard-table td {
+            border-bottom: 1px solid #39597c;
+        }
+    </style>
+</head>
+<body class="light-theme">    
+    <div class="container">
+        <header>
+            <h1>DASH: Detection and Assessment of Systematic Hallucinations of VLMs</h1>
+            <div class="authors">
+                <span class="author">Maximilian Augustin*</span> &nbsp;
+                <span class="author">Yannic Neuhaus*</span> &nbsp;
+                <span class="author">Matthias Hein</span> 
+            </div>
+            <div class="institution">University of Tübingen and Tübingen AI Center</div>
+            <div class="contrib">* equal contribution</div>
+        </header>
+        <div class="teaser-container">
+            <image src="./assets/teaser_figure_wide.png"  class="teaser-image">
+        </div>
+     <div class="platform-links">
+        <!-- <div class="platform-links-container"> -->
+
+        <a href="https://github.com/YanNeu/DASH" target="_blank">
+            <img src="./assets/logos/GitHub_Logo.png" alt="Github"  width="100" height="50">
+        </a>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <a href="https://arxiv.org/abs/2503.23573" target="_blank">
+                <img src="./assets/logos/arxiv-logo.svg" alt="arXiv"  width="100" height="50">
+        </a>
+    <!-- </div> -->
+    </div>
+      
+        <div class="abstract">
+            <h2>Abstract</h2>
+            <p>
+                Vision-language models (VLMs) are prone to object hallucinations, where they erroneously indicate the presence of certain objects in an image. Existing benchmarks quantify hallucinations using relatively small, labeled datasets. However, this approach is i) insufficient to assess hallucinations that arise in open-world settings, where VLMs are widely used, and ii) inadequate for detecting systematic errors in VLMs. We propose
+<b>DASH</b> (Detection and Assessment of Systematic Hallucinations), an automatic, large-scale pipeline designed to identify systematic hallucinations of VLMs on real-world images in an open-world setting.
+A key component is DASH-OPT for image-based retrieval, where we optimize over the "natural image manifold" to generate images that mislead the VLM. The output of DASH consists of clusters of real and semantically similar images for which the VLM hallucinates an object. We apply DASH to PaliGemma-3B and two LLaVA-NeXT models across 380 object classes and, in total, find more than 19k clusters with 950k images. 
+We study the transfer of the identified systematic hallucinations to other VLMs and show that fine-tuning PaliGemma-3B with the model-specific images obtained with DASH mitigates object hallucinations.
+            </p>
+        </div>
+        
+        <section>
+            <h2>DASH Pipeline </h2>
+            <p>    
+                We provide code for the pipeline and URLs for the resulting images.
+            </p>
+            <h3><a href="https://github.com/YanNeu/DASH" target="_blank">Code and Image URLs</a></h3>
+
+        </section>
+
+        <section>
+            <h2>
+            DASH-B: Object Hallucination Benchmark for Vision Language Models 
+            </h2>
+            
+            
+            <p>
+                The benchmark consists of 2682 images for a range of 70 different objects. The used query is "Can you see a object in this image. Please answer only with yes or no." 1341 of the images do not contain the corresponding object but trigger object hallucinations. They were retrieved using the DASH pipeline. The remaining 1341 images contain the objects.
+            </p>
+            
+            <p style="margin-bottom: 1;"><h3><a href="https://github.com/YanNeu/DASH-B">Benchmark Code and Data</a></h3></p>
+            
+
+            <h3>Examples</h3>
+
+            <p>
+                Examples of benchmark images that do <b>not</b> contain the object but trigger object hallucinations for gpt-4o-mini-2024-07-18 (best in the leaderboard).
+            </p>
+            <img src="./assets/examples.jpg" alt="Benchmark Example Images" style="max-width: 100%; border-radius: 5px;">
+            
+            
+            <h3>Leaderboard</h3>
+            
+            <style>
+            .light-theme .leaderboard-table th {
+                background-color: #f0c693;
+                color: #1a365d;
+            }
+            
+            .light-theme .leaderboard-table tr:nth-child(even) {
+                background-color: #f2f2f2;
+            }
+            
+            .light-theme .leaderboard-table tr:hover {
+                background-color: #FFEAC2;
+            }
+            </style>
+            
+            <table class="leaderboard-table">
+            <thead>
+                <tr>
+                <th>Pos.</th>
+                <th>Model</th>
+                <th>ACC</th>
+                <th>TNR</th>
+                <th>TPR</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                <td>1</td>
+                <td>gpt-4o-mini-2024-07-18</td>
+                <td>86.3%</td>
+                <td>77.0%</td>
+                <td>95.7%</td>
+                </tr>
+                <tr>
+                <td>2</td>
+                <td>InternVL2.5-26B</td>
+                <td>77.5%</td>
+                <td>57.3%</td>
+                <td>97.8%</td>
+                </tr>
+                <tr>
+                <td>3</td>
+                <td>InternVL2.5-38B</td>
+                <td>76.2%</td>
+                <td>54.8%</td>
+                <td>97.6%</td>
+                </tr>
+                <tr>
+                <td>4</td>
+                <td>InternVL2.5-26B-MPO</td>
+                <td>76.1%</td>
+                <td>54.8%</td>
+                <td>97.4%</td>
+                </tr>
+                <tr>
+                <td>5</td>
+                <td>LLaVA-Onevision-05b</td>
+                <td>75.1%</td>
+                <td>60.2%</td>
+                <td>90.1%</td>
+                </tr>
+                <tr>
+                <td>6</td>
+                <td>InternVL2.5-78B</td>
+                <td>74.1%</td>
+                <td>50.3%</td>
+                <td>97.8%</td>
+                </tr>
+                <tr>
+                <td>7</td>
+                <td>InternVL2.5-8B</td>
+                <td>71.7%</td>
+                <td>47.2%</td>
+                <td>96.2%</td>
+                </tr>
+                <tr>
+                <td>8</td>
+                <td>Ovis2-8B</td>
+                <td>71.4%</td>
+                <td>44.8%</td>
+                <td>98.0%</td>
+                </tr>
+                <tr>
+                <td>9</td>
+                <td>PaliGemma2-10B</td>
+                <td>69.8%</td>
+                <td>48.0%</td>
+                <td>91.6%</td>
+                </tr>
+                <tr>
+                <td>10</td>
+                <td>InternVL2.5-8B-MPO</td>
+                <td>69.4%</td>
+                <td>42.3%</td>
+                <td>96.4%</td>
+                </tr>
+                <tr>
+                <td>11</td>
+                <td>PaliGemma2-3B</td>
+                <td>68.9%</td>
+                <td>40.9%</td>
+                <td>96.8%</td>
+                </tr>
+                <tr>
+                <td>12</td>
+                <td>LLaVa-1.6-Llama</td>
+                <td>65.2%</td>
+                <td>37.0%</td>
+                <td>93.4%</td>
+                </tr>
+                <tr>
+                <td>13</td>
+                <td>Ovis2-4B</td>
+                <td>64.8%</td>
+                <td>31.0%</td>
+                <td>98.6%</td>
+                </tr>
+                <tr>
+                <td>14</td>
+                <td>Ovis2-1B</td>
+                <td>64.6%</td>
+                <td>35.1%</td>
+                <td>94.0%</td>
+                </tr>
+                <tr>
+                <td>15</td>
+                <td>PaliGemma-3B</td>
+                <td>62.0%</td>
+                <td>26.4%</td>
+                <td>97.7%</td>
+                </tr>
+                <tr>
+                <td>16</td>
+                <td>LLaVa-1.6-Mistral</td>
+                <td>61.7%</td>
+                <td>30.1%</td>
+                <td>93.4%</td>
+                </tr>
+                <tr>
+                <td>17</td>
+                <td>Ovis2-2B</td>
+                <td>61.7%</td>
+                <td>27.3%</td>
+                <td>96.1%</td>
+                </tr>
+                <tr>
+                <td>18</td>
+                <td>LLaVa-1.6-Vicuna</td>
+                <td>53.7%</td>
+                <td>10.4%</td>
+                <td>96.9%</td>
+                </tr>
+            </tbody>
+            </table>
+        </section>
+        
+        
+        <footer>
+            © 2025 <a href="https://uni-tuebingen.de/fakultaeten/mathematisch-naturwissenschaftliche-fakultaet/fachbereiche/informatik/lehrstuehle/maschinelles-lernen/news/"> Machine Learning Group, University of Tübingen</a>
+        </footer>
+    </div>
+    
+    <script>
+        function toggleTheme() {
+            const body = document.body;
+            if (body.classList.contains('light-theme')) {
+                body.classList.remove('light-theme');
+                body.classList.add('dark-theme');
+            } else {
+                body.classList.remove('dark-theme');
+                body.classList.add('light-theme');
+            }
+        }
+    </script>
+</body>
+</html>
