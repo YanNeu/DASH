@@ -1,237 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="stylesheet" type="text/css" href="styles.css"/>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DASH: Detection and Assessment of Systematic Hallucinations of VLMs</title>
-    <style>
-        /* Common Styles */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            transition: background-color 0.3s, color 0.3s;
-        }
-        
-        body {
-            font-family: 'Avenir Next', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            padding: 0;
-            margin: 0;
-        }
-        
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        
-        header {
-            text-align: center;
-            padding: 2rem 0;
-        
-        .teaser-container {
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            margin: 2rem 0;
-        }
-        
-        .teaser-image {
-            max-width: 100%;
-            height: 200px; /* Set an appropriate height */
-            border-radius: 5px;
-        }
-
-        .platform-links {
-           background-color: #FFEAC2; /* Light orange */
-           display: flex;
-            gap: 40px;
-            align-items: center;
-            align: center;
-            margin: 2rem 0;
-            padding: 0.1rem;
-            justify-content: center;
-
-            border-radius: 5px;
-            max-width: 100%;
-        }
-        .platform-links a {
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            flex-direction: column;
-            gap: 5px;
-            color: black;
-            font-size: 16px;
-            font-family: 'Avenir Next', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        .platform-links img {
-/*            width: 10/*0px;*/
-/*            height: 40px;*/
-            object-fit: contain;
-            transition: transform 0.3s;
-        }
-        .platform-links img:hover {
-            transform: scale(1.1);
-        }
     
-        
-        h1 {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-        }
-        
-        .authors {
-            font-size: 1.2rem;
-            margin-bottom: 1.5rem;
-        }
-        
-        .author {
-            margin: 0 0.5rem;
-        }
-        .contrib {
-            font-size: 0.8rem;
-            margin: 0 0.5rem;
-        }
-        
-        .abstract {
-            margin: 2rem 0;
-            padding: 1.5rem;
-            border-radius: 5px;
-            max-width: 100%;
-
-        }
-        
-        .abstract h2 {
-            margin-bottom: 1rem;
-
-        }
-        
-        section {
-            margin: 2rem 0;
-        }
-        
-        section h2 {
-            margin-bottom: 1rem;
-        }
-        
-        p {
-            margin-bottom: 1rem;
-            text-align: justify;
-        }
-        
-        .theme-toggle {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 10px 15px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: bold;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-        }
-         /* Dark Theme - Updated with more gentle colors */
-        body.dark-theme {
-            background-color: #1a365d;
-            color: #FFEAC2;
-        }
-        
-        .dark-theme .abstract {
-            background-color: #234470;
-        }
-        
-        .dark-theme .theme-toggle {
-            background-color: #FFEAC2;
-            color: #1a365d;
-        }
-        
-        .dark-theme a {
-            color: #f0c693;
-        }
-
-        body.light-theme {
-            background-color: #ffffff;
-            color: #333333;
-        }
-        
-        .light-theme .abstract {
-            background-color: #f5f5f5;
-        }
-        
-        .light-theme .theme-toggle {
-            background-color: #1a365d;
-            color: #f5f5f5;
-        }
-        
-        ::-moz-selection { /* Code for Firefox */
-            color: white;
-            background: #234470;
-        }
-
-        ::selection {
-            color: white;
-            background: #234470;
-        }       
-        footer {
-            text-align: center;
-            padding: 2rem 0;
-            margin-top: 3rem;
-            font-size: 0.9rem;
-        }
-        .leaderboard-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 20px 0;
-            font-size: 16px;
-        }
-        
-        .leaderboard-table th {
-            background-color: #1a365d;
-            color: #FFEAC2;
-            text-align: left;
-            padding: 12px 15px;
-        }
-        
-        .leaderboard-table td {
-            padding: 10px 15px;
-            border-bottom: 1px solid #ddd;
-        }
-        
-        .leaderboard-table tr:nth-child(even) {
-            background-color: #f2f2f2;
-        }
-        
-        .leaderboard-table tr:hover {
-            background-color: #e5e5e5;
-        }
-        
-        .dark-theme .leaderboard-table th {
-            background-color: #234470;
-        }
-        
-        .dark-theme .leaderboard-table tr:nth-child(even) {
-            background-color: #2c4c7c;
-        }
-        
-        .dark-theme .leaderboard-table tr:hover {
-            background-color: #39597c;
-        }
-        
-        .dark-theme .leaderboard-table td {
-            border-bottom: 1px solid #39597c;
-        }
-        
-        .dark-theme pre {
-            background-color: #234470;
-            color: #FFEAC2;
-        }
-        .light-theme pre {
-            background-color: #f5f5f5;
-            color: #333333;
-        }
-    </style>
 </head>
 <body class="light-theme">    
     <div class="container">
@@ -248,23 +22,20 @@
         <div class="teaser-container">
             <image src="./assets/teaser_figure_wide.png"  class="teaser-image">
         </div>
-     <div class="platform-links">
-        <!-- <div class="platform-links-container"> -->
-
-        <a href="https://github.com/YanNeu/DASH" target="_blank">
-            <img src="./assets/logos/GitHub_Logo.png" alt="GitHub"  width="100" height="50">
-        </a>
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <div class="platform-links">
+            <a href="https://github.com/YanNeu/DASH" target="_blank">
+                <img src="./assets/logos/GitHub_Logo.png" alt="Github" width="100" height="40">
+            </a>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <a href="https://arxiv.org/abs/2503.23573" target="_blank">
-                <img src="./assets/logos/arxiv-logo.svg" alt="arXiv"  width="100" height="50">
-        </a>
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <img src="./assets/logos/arxiv-logo.svg" alt="arXiv" width="100" height="40">
+            </a>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <a href="https://huggingface.co/datasets/YanNeu/DASH-B" target="_blank">
-                <img src="./assets/logos/huggingface.svg" alt="Hugging Face"  width="100"height="50">
-        </a>
-    <!-- </div> -->
-    </div>
-      
+                <img src="./assets/logos/huggingface.svg" alt="Hugging Face" width="120" height="50">
+            </a>
+        </div>
+    
         <div class="abstract">
             <h2>Abstract</h2>
             <p>
@@ -307,20 +78,6 @@ We study the transfer of the identified systematic hallucinations to other VLMs 
             
             <h3>Leaderboard</h3>
             
-            <style>
-            .light-theme .leaderboard-table th {
-                background-color: #f0c693;
-                color: #1a365d;
-            }
-            
-            .light-theme .leaderboard-table tr:nth-child(even) {
-                background-color: #f2f2f2;
-            }
-            
-            .light-theme .leaderboard-table tr:hover {
-                background-color: #FFEAC2;
-            }
-            </style>
             
             <table class="leaderboard-table">
             <thead>
